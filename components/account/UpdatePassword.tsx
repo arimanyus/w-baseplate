@@ -46,10 +46,8 @@ const UpdatePassword = () => {
         <Card>
           <Card.Body>
             <Card.Header>
-              <Card.Title>Password</Card.Title>
-              <Card.Description>
-                You can change your password here.
-              </Card.Description>
+              <Card.Title>{t('password')}</Card.Title>
+              <Card.Description>{t('change-password-text')}</Card.Description>
             </Card.Header>
             <div className="flex flex-col space-y-3">
               <InputWithLabel
@@ -64,6 +62,7 @@ const UpdatePassword = () => {
                     : undefined
                 }
                 onChange={formik.handleChange}
+                className="text-sm"
               />
               <InputWithLabel
                 type="password"
@@ -77,6 +76,7 @@ const UpdatePassword = () => {
                     : undefined
                 }
                 onChange={formik.handleChange}
+                className="text-sm"
               />
             </div>
           </Card.Body>

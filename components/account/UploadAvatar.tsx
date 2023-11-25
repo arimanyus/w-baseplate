@@ -9,7 +9,7 @@ import type { User } from '@prisma/client';
 import { Card } from '@/components/shared';
 import { defaultHeaders } from '@/lib/common';
 
-const UploadAvatar = ({ user }: { user: User }) => {
+const UploadAvatar = ({ user }: { user: Partial<User> }) => {
   const { t } = useTranslation('common');
   const [dragActive, setDragActive] = useState(false);
   const [image, setImage] = useState<string | null>();
@@ -75,8 +75,9 @@ const UploadAvatar = ({ user }: { user: User }) => {
       body: JSON.stringify({ image }),
     });
 
-    const json = (await response.json()) as ApiResponse<User>;
     setLoading(false);
+
+    const json = (await response.json()) as ApiResponse;
 
     if (!response.ok) {
       toast.error(json.error.message);
@@ -91,10 +92,10 @@ const UploadAvatar = ({ user }: { user: User }) => {
       <Card>
         <Card.Body>
           <Card.Header>
-            <Card.Title>Avatar</Card.Title>
+            <Card.Title>{t('avatar')}</Card.Title>
             <Card.Description>
-              Click on the avatar to upload a custom one from your files. <br />{' '}
-              Accepted file types: .png, .jpg. Max file size: 2MB.
+              {t('custom-avatar')} <br />
+              {t('avatar-type')}
             </Card.Description>
           </Card.Header>
           <div>

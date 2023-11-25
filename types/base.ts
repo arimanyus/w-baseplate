@@ -65,3 +65,12 @@ export type AUTH_PROVIDER =
   | 'saml'
   | 'email'
   | 'credentials';
+
+export interface TeamFeature {
+  sso: boolean;
+  dsync: boolean;
+  auditLog: boolean;
+  webhook: boolean;
+  apiKey: boolean;
+  deleteTeam: boolean;
+}

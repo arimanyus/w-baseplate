@@ -10,7 +10,7 @@ import { useState, type ReactElement, useEffect } from 'react';
 import { Button } from 'react-daisyui';
 import type { ComponentStatus } from 'react-daisyui/dist/types';
 import { toast } from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { ApiResponse, NextPageWithLayout } from 'types';
 import * as Yup from 'yup';
 
@@ -33,7 +33,7 @@ const VerifyAccount: NextPageWithLayout<
     if (error) {
       setMessage({ text: error, status: 'error' });
     }
-  }, [router, router.query]);
+  }, [router, router.query, error]);
 
   const formik = useFormik({
     initialValues: {
@@ -92,7 +92,7 @@ const VerifyAccount: NextPageWithLayout<
               fullWidth
               size="md"
             >
-              Resend Link
+              {t('resend-link')}
             </Button>
           </div>
         </form>

@@ -13,7 +13,12 @@ const schema = Yup.object().shape({
   email: Yup.string().required(),
 });
 
-const UpdateEmail = ({ user }: { user: User }) => {
+interface UpdateEmailProps {
+  user: Partial<User>;
+  allowEmailChange: boolean;
+}
+
+const UpdateEmail = ({ user, allowEmailChange }: UpdateEmailProps) => {
   const { t } = useTranslation('common');
 
   const formik = useFormik({
@@ -28,7 +33,7 @@ const UpdateEmail = ({ user }: { user: User }) => {
         body: JSON.stringify(values),
       });
 
-      const json = (await response.json()) as ApiResponse<User>;
+      const json = (await response.json()) as ApiResponse;
 
       if (!response.ok) {
         toast.error(json.error.message);
@@ -44,9 +49,9 @@ const UpdateEmail = ({ user }: { user: User }) => {
       <Card>
         <Card.Body>
           <Card.Header>
-            <Card.Title>Email Address</Card.Title>
+            <Card.Title>{t('email-address')}</Card.Title>
             <Card.Description>
-              The email address you use to sign in to your account.
+              {t('email-address-description')}
             </Card.Description>
           </Card.Header>
           <Input
@@ -57,6 +62,7 @@ const UpdateEmail = ({ user }: { user: User }) => {
             onChange={formik.handleChange}
             className="w-full max-w-md"
             required
+            disabled={!allowEmailChange}
           />
         </Card.Body>
         <Card.Footer>

@@ -9,19 +9,22 @@ import { Card } from '@/components/shared';
 import { defaultHeaders } from '@/lib/common';
 import { User } from '@prisma/client';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const schema = Yup.object().shape({
   name: Yup.string().required(),
 });
 
-const UpdateName = ({ user }: { user: User }) => {
+const UpdateName = ({ user }: { user: Partial<User> }) => {
   const { t } = useTranslation('common');
-  const { data: session, update } = useSession();
+  const { update } = useSession();
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
       name: user.name,
     },
+    enableReinitialize: true,
     validationSchema: schema,
     onSubmit: async (values) => {
       const response = await fetch('/api/users', {
@@ -30,7 +33,7 @@ const UpdateName = ({ user }: { user: User }) => {
         body: JSON.stringify(values),
       });
 
-      const json = (await response.json()) as ApiResponse<User>;
+      const json = (await response.json()) as ApiResponse;
 
       if (!response.ok) {
         toast.error(json.error.message);
@@ -38,13 +41,10 @@ const UpdateName = ({ user }: { user: User }) => {
       }
 
       await update({
-        ...session,
-        user: {
-          ...session?.user,
-          name: json.data.name,
-        },
+        name: values.name,
       });
 
+      router.replace('/settings/account');
       toast.success(t('successfully-updated'));
     },
   });
@@ -54,10 +54,8 @@ const UpdateName = ({ user }: { user: User }) => {
       <Card>
         <Card.Body>
           <Card.Header>
-            <Card.Title>Name</Card.Title>
-            <Card.Description>
-              This is how your name will appear in the interface.
-            </Card.Description>
+            <Card.Title>{t('name')}</Card.Title>
+            <Card.Description>{t('name-appearance')}</Card.Description>
           </Card.Header>
           <Input
             type="text"
